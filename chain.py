@@ -1,3 +1,4 @@
+import json
 
 class Chain(object):
     def __init__(self):
@@ -33,4 +34,28 @@ class Chain(object):
             total += self.get_transition(data[0], data[1])
 
         return total / len(data)
+
+    def serialize(self):
+        structure = {}
+        for i in range(len(self.chain)):
+            if not self.totals[i]:
+                continue
+            sub_transitions = {"total":self.totals[i]}
+            for j in range(len(self.chain[i])):
+                if (self.chain[i][j]):
+                    sub_transitions[j] = self.chain[i][j]
+            structure[i] = sub_transitions
+        return json.dumps(structure)
         
+    @staticmethod
+    def deserialize(chain_string):
+        chain = Chain()
+        structure = json.loads(chain_string)
+        for start, ends in structure.iteritems():
+            for end, count in ends.iteritems():
+                if end == "total":
+                    chain.totals[int(start)] = count;
+                    continue;
+                chain.chain[int(start)][int(end)] = count
+        return chain
+            
