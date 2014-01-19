@@ -2,20 +2,19 @@ from chain import *
 import sys
 import os
 
-def generate_definitions(directory):
+def load_definitions(directory):
     files = os.listdir(directory)
     defs = {}
     for fname in files:
         f = open(os.path.join(directory, fname), 'r')
-        c = Chain()
-        c.record_string(f.read())
+        c = Chain.deserialize(f.read())
         f.close()
         
         defs[fname] = c
     return defs
 
 def main():
-    defs = generate_definitions("references")
+    defs = load_definitions("references")
     fname = sys.argv[1]
     data = None
     with open(fname) as f:
