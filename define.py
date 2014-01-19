@@ -1,5 +1,6 @@
 import os
 import sys
+import zlib
 from chain import Chain
 
 def main():
@@ -9,9 +10,9 @@ def main():
         print "Reading " + fname
         chain.record_string(f.read())
 
-    with open("references/" + sys.argv[2], "w") as fout:
+    with open("definitions/" + sys.argv[2], "w") as fout:
         print "Writing " + sys.argv[2]
-        fout.write(chain.serialize())
+        fout.write(zlib.compress(chain.serialize()))
     
 
 if __name__ == "__main__":

@@ -1,20 +1,21 @@
 from chain import *
 import sys
 import os
+import zlib
 
 def load_definitions(directory):
     files = os.listdir(directory)
     defs = {}
     for fname in files:
         f = open(os.path.join(directory, fname), 'r')
-        c = Chain.deserialize(f.read())
+        c = Chain.deserialize(zlib.decompress(f.read()))
         f.close()
         
         defs[fname] = c
     return defs
 
 def main():
-    defs = load_definitions("references")
+    defs = load_definitions("definitions")
     fname = sys.argv[1]
     data = None
     with open(fname) as f:
